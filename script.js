@@ -25,16 +25,18 @@ buttons.forEach((button) => button.addEventListener('click', insertNumber));
 const selectOperator = (event) => {
     newNumber = true;
     operator = event.target.textContent;
-    previousNumber = display.textContent;
+    previousNumber = display.textContent.replace(",", ".");
 }
 
 operators.forEach((operator) => operator.addEventListener('click', selectOperator));
 
 const calculate = () => {
-    const actualNumber = display.textContent;
+    const actualNumber = display.textContent.replace(",", ".");
     const result = eval(`${previousNumber}${operator}${actualNumber}`); //template string, utilizando craze
+    const displayResult = result.toString().replace(".", ",");
     newNumber = true;
-    updateDisplay(result);
+    previousNumber = actualNumber;
+    updateDisplay(displayResult);
 }
 
 const equal = document.querySelector("#igual");
@@ -61,7 +63,17 @@ document.querySelector("#backspace").addEventListener("click", removeLastNumber)
 
 const invertSignal = () => {
     newNumber = true;
-    updateDisplay(display.textContent * -1);
+    const result = display.textContent.replace(",", ".") * -1;
+    const displayResult = result.toString().replace(".", ",");
+    updateDisplay(displayResult);
 }
 
 document.querySelector("#inverter").addEventListener("click", invertSignal);
+
+const addDecimal = () => {
+    if (!newNumber) {
+        updateDisplay(",");
+    } 
+}
+
+document.querySelector("#decimal").addEventListener("click", addDecimal);
